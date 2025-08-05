@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>DIFF CHECKER</title>
+
+  <!-- ✅ Correct dark theme for side-by-side diff -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/diff2html@3.4.36/bundles/css/diff2html.min.css" />
+
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      font-family: Consolas, monospace;
+      padding: 20px;
+    }
+
+    textarea {
+      width: 49%;
+      height: 200px;
+      background: #2d2d2d;
+      color: #f8f8f2;
+      font-family: monospace;
+      border: 1px solid #444;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .editor {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 2%;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto 20px;
+      padding: 10px 20px;
+      background-color: #00d8ff;
+      color: #000;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #diff {
+      background: #2d2d2d;
+      border-radius: 8px;
+      overflow-x: auto;
+
+    }
+
+    .d2h-file-side-diff {
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #00d8ff #2d2d2d;
+    }
+
+    /* Chrome, Edge, Safari */
+    .d2h-file-side-diff::-webkit-scrollbar {
+      height: 10px;
+      background-color: #2d2d2d;
+    }
+
+    .d2h-file-side-diff::-webkit-scrollbar-thumb {
+      background-color: #00d8ff;
+      border-radius: 5px;
+    }
+
+    .d2h-file-side-diff::-webkit-scrollbar-thumb:hover {
+      background-color: #00bcd4;
+    }
+
+    .d2h-file-side-diff::-webkit-scrollbar-track {
+      background-color: #2d2d2d;
+    }
+
+    .d2h-file-wrapper,
+    .d2h-file-header,
+    .d2h-file-side-diff,
+    .d2h-info,
+    .d2h-ins,
+    .d2h-del,
+    .d2h-code-side-linenumber {
+      background: #2d2d2d;
+      color: antiquewhite;
+    }
+
+    .d2h-code-side-emptyplaceholder, .d2h-emptyplaceholder{
+      background-color: #ffb6ba;
+    }
+    .d2h-file-wrapper {
+      margin-bottom: 0 !important;
+    }
+
+    .d2h-code-line del,
+    .d2h-code-side-line del {
+      color: #000;
+      padding: 5px;
+    }
+
+    .d2h-code-line ins,
+    .d2h-code-side-line ins {
+      color: #000;
+      padding: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1 style="text-align:center; color:#00d8ff;">Diff Viewer</h1>
+
+  <div class="editor">
+    <textarea id="oldCode" placeholder="Original code..."></textarea>
+
+    <textarea id="newCode" placeholder="Modified code..."></textarea>
+  </div>
+
+  <button onclick="generateDiff()">Compare</button>
+
+  <div id="diff"></div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/diff@5.1.0/dist/diff.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/diff2html@3.4.36/bundles/js/diff2html.min.js"></script>
+
+  <script>
+    function generateDiff() {
+      const oldCode = document.getElementById('oldCode').value;
+      const newCode = document.getElementById('newCode').value;
+
+      const unifiedDiff = Diff.createTwoFilesPatch('Old', 'New', oldCode, newCode, '', '');
+
+      const target = document.getElementById('diff');
+      target.innerHTML = Diff2Html.html(unifiedDiff, {
+        drawFileList: false,
+        matching: 'lines',
+        outputFormat: 'side-by-side', 
+        diffStyle: 'word',
+      });
+    }
+  </script>
+
+</body>
+
+</html>
